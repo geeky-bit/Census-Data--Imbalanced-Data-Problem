@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "set.seed(2002)\nxgb_learner <- makeLearner(\"classif.xgboost\",predict.type = \"response\")\nxgb_learner$par.vals <- list(objective = \"binary:logistic\", eval_metric = \"error\", nrounds = 150,print_every_n = 50)\n\nxg_ps <- makeParamSet( \n  makeIntegerParam(\"max_depth\",lower=3,upper=10),\n  makeNumericParam(\"lambda\",lower=0.05,upper=0.5),\n  makeNumericParam(\"eta\", lower = 0.01, upper = 0.5),\n  makeNumericParam(\"subsample\", lower = 0.50, upper = 1),\n  makeNumericParam(\"min_child_weight\",lower=2,upper=10),\n  makeNumericParam(\"colsample_bytree\",lower = 0.50,upper = 0.80)\n)\n\nrancontrol <- makeTuneControlRandom(maxit = 5L)\n\n#set_cv <- makeResampleDesc(\"CV\",iters = 4L,stratify = TRUE)\nset_cv <- makeResampleDesc(\"CV\",iters = 5L,stratify = TRUE)\n\n#tune parameters\nxgb_tune <- tuneParams(learner = xgb_learner, task = train.task, resampling = set_cv, measures = list(acc,tpr,tnr,fpr,fp,fn), par.set = xg_ps, control = rancontrol)\n\nxgb_new <- setHyperPars(learner = xgb_learner, par.vals = xgb_tune$x)\n\nxgmodel <- train(xgb_new, train.task)\n\npredict.xg <- predict(xgmodel, test.task)\n\nxg_prediction <- predict.xg$data$response\n\nxg_confused <- confusionMatrix(d_test$income_level,xg_prediction)\n\nprecision <- xg_confused$byClass['Pos Pred Value']\nrecall <- xg_confused$byClass['Sensitivity']\n\nf_measure <- 2*((precision*recall)/(precision+recall))\n\n\n\n#filtered.data <- filterFeatures(train.task,method = \"information.gain\",abs = 15)\n#filtered.data <- filterFeatures(train.task,method = \"information.gain\",abs = 20)\n#filtered.data <- filterFeatures(train.task,method = \"information.gain\",abs = 25)\n\n# xgb_boost <- train(xgb_new,filtered.data)\n\npredict.xg$threshold # Threshold is 0.5\n\n# Changing the model parameters \n# predict.type = \"prob\" instead of predict.type=\"response\"\n\n\nxgb_prob <- setPredictType(learner = xgb_new,predict.type = \"prob\")\nxgmodel_prob <- train(xgb_prob,train.task)\npredict.xgprob <- predict(xgmodel_prob,test.task)\n\n#Change the Threshold to 0.4 and try for 0.25 or 0.3\n# pred2 <- setThreshold(predict.xgprob,0.25)\n# pred2 <- setThreshold(predict.xgprob,0.3)\n\npred2 <- setThreshold(predict.xgprob,0.4)\nconfusionMatrix(d_test$income_level,pred2$data$response)\n",
+    "created" : 1500524034247.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2141272743",
+    "id" : "F0BEAB43",
+    "lastKnownWriteTime" : 1500526037,
+    "last_content_update" : 1500526037981,
+    "path" : "~/Projects/Census problem - Imbalanced Data/Census data/XGBoost.R",
+    "project_path" : "XGBoost.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

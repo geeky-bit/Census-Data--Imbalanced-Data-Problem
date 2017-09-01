@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "naive_learner <- makeLearner(\"classif.naiveBayes\",predict.type = \"response\")\nnaive_learner$par.vals <- list(laplace = 1)\n\nfolds <- makeResampleDesc(\"CV\",iters=10,stratify = TRUE)\n\n fun_cv <- function(a)\n{\n crv_val <- resample(naive_learner,a,folds,measures = list(acc,tpr,tnr,fpr,fp,fn))\n crv_val$aggr\n}\n \n# Check for the 4-datasets that we have - Original, Under-sampling, Over-sampling, SMOTE\n\nfun_cv(train.task)\nfun_cv(train.under)\nfun_cv(train.over)\nfun_cv(train.smote)\n\nnB_model <- train(naive_learner, train.smote)\nnB_predict <- predict(nB_model,test.task)\n\nnB_prediction <- nB_predict$data$response\ndCM <- confusionMatrix(d_test$income_level,nB_prediction)\nprecision <- dCM$byClass['Pos Pred Value']\nrecall <- dCM$byClass['Sensitivity']\n\nf_measure <- 2*((precision*recall)/(precision+recall))\nf_measure ",
+    "created" : 1500523581622.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "510494443",
+    "id" : "8FB60369",
+    "lastKnownWriteTime" : 1500525850,
+    "last_content_update" : 1500525850294,
+    "path" : "~/Projects/Census problem - Imbalanced Data/Census data/Naives-Bayes.R",
+    "project_path" : "Naives-Bayes.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
