@@ -4,7 +4,7 @@ library(plotly)
 library(caret)
 library(mlr)
 
-path <- "C:\\Users\\geeky\\Documents\\Projects\\Census problem - Imbalanced Data\\Data\\"
+path <- "\Data\"
 setwd(path)
 
 train <- fread("train.csv",na.strings = c(""," ","?","NA",NA))
