@@ -1,6 +1,6 @@
 # Handling Imbalanced-Data-Problem using Census Data
 
-The data used in this example is imbalanced, fairly large and high dimensional. The basic purpose of this example is to show how to handle Imabalanced datasets. This is fairly simple approach (one of the many).
+The data used in this example is imbalanced, fairly large and high dimensional. _The basic purpose of this example is to show how to handle Imabalanced datasets._ This is fairly simple approach (one of the many).
 
 **In this project, following tasks are performed :**
 * Data Exploration
